@@ -54,19 +54,21 @@ nav.scrolled{background:rgba(30,26,22,0.95);backdrop-filter:blur(20px);padding:1
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;z-index:1001;transition:opacity 0.3s ease}
 .hamburger span{display:block;width:24px;height:1.5px;background:var(--cream);transition:all 0.4s}
 .hamburger.hidden{opacity:0;pointer-events:none}
-.mobile-menu{display:none;position:fixed;inset:0;z-index:998;background:var(--charcoal);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
-.mobile-menu.open{display:flex}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:998;background:var(--charcoal);flex-direction:column;align-items:center;justify-content:center;gap:2rem;opacity:0;transition:opacity 0.4s cubic-bezier(0.16,1,0.3,1)}
+.mobile-menu.open{display:flex;opacity:1;pointer-events:all}
+.mobile-menu:not(.open){pointer-events:none}
 .mobile-menu a{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--cream);text-decoration:none;transition:color 0.3s;opacity:0;transform:translateY(20px)}
 .mobile-menu.open a{animation:slideUp 0.5s ease forwards}
-.mobile-menu.open a:nth-child(2){animation-delay:0.05s}
-.mobile-menu.open a:nth-child(3){animation-delay:0.1s}
-.mobile-menu.open a:nth-child(4){animation-delay:0.15s}
-.mobile-menu.open a:nth-child(5){animation-delay:0.2s}
-.mobile-menu.open a:nth-child(6){animation-delay:0.25s}
-.mobile-menu.open a:nth-child(7){animation-delay:0.3s}
+.mobile-menu.open a:nth-child(2){animation-delay:0.1s}
+.mobile-menu.open a:nth-child(3){animation-delay:0.15s}
+.mobile-menu.open a:nth-child(4){animation-delay:0.2s}
+.mobile-menu.open a:nth-child(5){animation-delay:0.25s}
+.mobile-menu.open a:nth-child(6){animation-delay:0.3s}
+.mobile-menu.open a:nth-child(7){animation-delay:0.35s}
 @keyframes slideUp{to{opacity:1;transform:translateY(0)}}
 .mobile-menu a:hover{color:var(--gold)}
-.mobile-close{position:absolute;top:2rem;right:2rem;font-size:1.8rem;color:var(--cream);cursor:pointer;background:none;border:none;z-index:1000;padding:0.5rem;transition:color 0.3s;opacity:0;pointer-events:none}
+.mobile-close{position:absolute;top:2rem;right:2rem;font-size:2rem;color:var(--cream);cursor:pointer;background:none;border:none;z-index:1000;padding:0.75rem;transition:all 0.3s ease;opacity:0;pointer-events:none;width:50px;height:50px;display:flex;align-items:center;justify-content:center}
+.mobile-close:hover{color:var(--gold);transform:rotate(90deg)}
 .mobile-menu.open .mobile-close{opacity:1;pointer-events:all}
 
 /* ═══════════ HERO ═══════════ */
@@ -973,13 +975,30 @@ document.getElementById('revPrev').addEventListener('click',()=>rs.scrollBy({lef
 /* ══════════════════════════════════
    MOBILE MENU
 ══════════════════════════════════ */
-document.getElementById('hamburger').addEventListener('click',()=>{
-  document.getElementById('mobileMenu').classList.add('open');
-  document.getElementById('hamburger').classList.add('hidden');
+const hamburgerBtn = document.getElementById('hamburger');
+const closeBtn = document.getElementById('mobileClose');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuLinks = mobileMenu.querySelectorAll('a');
+
+function openMenu(){
+  mobileMenu.classList.add('open');
+  hamburgerBtn.classList.add('hidden');
   document.body.style.overflow='hidden';
+}
+
+function closeMobileMenu(){
+  mobileMenu.classList.remove('open');
+  hamburgerBtn.classList.remove('hidden');
+  document.body.style.overflow='';
+}
+
+hamburgerBtn.addEventListener('click', openMenu);
+closeBtn.addEventListener('click', closeMobileMenu);
+
+// Close menu when clicking on a link
+menuLinks.forEach(link => {
+  link.addEventListener('click', closeMobileMenu);
 });
-document.getElementById('mobileClose').addEventListener('click',closeMobile);
-function closeMobile(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('hidden');document.body.style.overflow='';}
 
 /* ══════════════════════════════════
    BOOKING DATE
